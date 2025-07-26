@@ -50,7 +50,6 @@ while True:
 
         if robots_parser.can_fetch("*", article_url):
 
-
             article_response = requests.get(
                 article_url, timeout=5, verify=certifi.where()
             )
