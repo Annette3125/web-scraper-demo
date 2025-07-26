@@ -1,5 +1,6 @@
 # web-scraper-demo
 Demo project: Python web scraper for CNN headlines.
+Repo: https://github.com/Annette3125/web-scraper-demo
 
 ## Prerequisites
 
@@ -66,8 +67,8 @@ pip install -r requirements.txt
 ## Clone the Repo
 
 ```commandline
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
+git clone https://github.com/Annette3125/web-scraper-demo.git
+cd web-scraper-demo
 ```
 
 ## Development
@@ -75,21 +76,22 @@ cd your-repo
 
 ```commandline
 pip install black isort
+black scrape.py
+isort scrape.py
 ```
-
 
 ## Usage and Running
 
 #### How to run script:
-
+Run the scrape.py
 ```commandline
 python scrape.py
 
 ```
-##### CSV file
+##### CSV output
 
 Saves web_scraper_demo/data/headlines1.scv with columns: Source,url,Heading,author,date.
-CSV file will be generated in directory data/healines1/.
+CSV file will be generated in directory data/headlines1/.
 
 Example of csv output:
 
@@ -107,9 +109,9 @@ edition.cnn.com,https://edition.cnn.com/world/live-news/israel-hamas-gaza-news-0
 ```
 
 
-###### JSON file
+###### JSON output
 Saves web_scraper_demo/data/headlines1.json with columns: Source,url,Heading,author,date.
-CSV file will be generated in directory data/healines1/.
+CSV file will be generated in directory data/headlines1/.
 
 Example of json output:
 
@@ -133,21 +135,19 @@ Example of json output:
 
 ```
 
+## License
 
-```commandline
-deactivate
-```
-And activate as you start again.
+This project is MIT-licensed. See LICENSE.
 
-Future Improvements
+
+
+
+###### Future Improvements
 
  - - Add SQLite integration for persistent storage.
 
-Created by Annette demonstrating web scrapping demo for CNN healines.
 
+- Feel free to adjust any URLs or paths to match your actual repo structure. This layout keeps things concise, clear and cross-platform.
+::contentReference[oaicite:0]{index=0}
 
-
-
-
-
-
+Created by Annette demonstrating a complete Python web-scrapping-demo pipelines (requests → BeautifulSoup → JSON/CSV).
