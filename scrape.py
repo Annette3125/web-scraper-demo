@@ -7,20 +7,38 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.robotparser import RobotFileParser
 
+from pathlib import Path
+
+
+
+DATA_DIR = Path("data")
+DATA_DIR.mkdir(exist_ok=True)
+
+DEBUG = False
+
+json_path = DATA_DIR / "headlines.json"
+csv_path = DATA_DIR / "headlines.csv"
+
+
+
 robots_parser = RobotFileParser()
-robots_txt = requests.get(
+robots_resp = requests.get(
     "https://edition.cnn.com/robots.txt", timeout=5, verify=certifi.where()
-).text
-robots_parser.parse(robots_txt.splitlines())
+)
+robots_resp.raise_for_status()
+
+robots_parser.parse(robots_resp.text.splitlines())
 
 base_url = "https://edition.cnn.com/"
 source = urlparse(base_url).netloc
 headlines = []
+seen_urls = set()
 visited = set()
 max_pages = 5
 page_count = 0
 
 listing_url = base_url
+
 while True:
     if listing_url in visited:
         print("Already visited", listing_url, " - stopping to avoid a loop.")
@@ -42,11 +60,20 @@ while True:
     for block in blocks:
         text = block.get_text(strip=True)
         link = block.find_parent("a")
-        print(f"Heading: {text}")
-        if not text or not link:
+        href = link.get("href") if link else None
+        if not text or not href:
             continue
 
-        article_url = urljoin(base_url, link["href"])
+        if DEBUG:
+            print(f"Scraped: {text} — by {author} on {date_date}")
+        elif len(headlines) % 10 == 0:
+            print(f"Scraped {len(headlines)} articles so far...")
+
+        article_url = urljoin(base_url, href)
+
+        if article_url in seen_urls:
+            continue
+        seen_urls.add(article_url)
 
         if robots_parser.can_fetch("*", article_url):
 
@@ -65,8 +92,8 @@ while True:
         date_tag = article_soup.select_one("div.timestamp__published")
         date_date = date_tag.text.strip() if date_tag else None
 
-        if not text or not link or not link.get("href"):
-            continue
+
+
 
         headlines.append(
             {
@@ -89,23 +116,21 @@ while True:
         break
 
 
-with open("data/headlines1.json", "w", encoding="utf-8") as f:
+
+with open(json_path, "w", encoding="utf-8") as f:
     json.dump(headlines, f, ensure_ascii=False, indent=4)
-print(f"Saved {len(headlines)} headlines to headlines1.json")
+print(f"Saved {len(headlines)} headlines to {json_path}")
 
-
-with open("data/headlines1.csv", "w", encoding="UTF-8", newline="") as file:
+with open(csv_path, "w", encoding="utf-8", newline="") as file:
     csv_writer = csv.writer(file)
-    csv_writer.writerow(["Source", "url", "Heading", "author", "date"])
+    csv_writer.writerow(["source", "url", "heading", "author", "date"])
 
     for item in headlines:
-        csv_writer.writerow(
-            [
-                item["source"],
-                item["url"],
-                item["heading"],
-                item["author"] or "",
-                item["date"] or "",
-            ]
-        )
-print(f"Saved {len(headlines)} headlines to headlines1.csv")
+        csv_writer.writerow([
+            item["source"],
+            item["url"],
+            item["heading"],
+            item["author"] or "",
+            item["date"] or "",
+        ])
+print(f"Saved {len(headlines)} headlines to {csv_path}")
