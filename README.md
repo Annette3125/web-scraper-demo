@@ -1,6 +1,5 @@
 # web-scraper-demo
-Demo project: Python web scraper for CNN headlines.
-Repo: https://github.com/Annette3125/web-scraper-demo
+Python web scraper for CNN headlines. Respects `robots.txt`, avoids duplicates, and saves output to CSV/JSON.
 
 ## Prerequisites
 
@@ -10,28 +9,23 @@ Before you start, make sure you have:
   Download from https://www.python.org/downloads/  
 - **Git** installed (for cloning the repo) 
 
-### Code Editor
+## Clone the Repo
 
-- A code editor or IDE of your choice
-- Recommended  PyCharm Community Edition or VS Code
-- Any editor that supports Python will work.
-
-
-## Installation
-
+```commandline
+git clone https://github.com/Annette3125/web-scraper-demo.git
+cd web-scraper-demo
+```
 ---
 ### Create virtual environment in project's root directory:
 - For Linux/Mac
 ```
 python3 -m venv venv
 ```
-
 - For Windows 
 
 ```
 python -m venv venv
 ```
-
 
 ### Activate the virtual environment
 
@@ -41,21 +35,10 @@ python -m venv venv
 source venv/bin/activate
 ```
 
-- For Windows PowerShell:
+- For Windows 
 
-```powershell
-.\venv\Scripts\Activate.ps1
-```
-
-- For Windows CMD:
-
-```comandline
-.venv\Scripts\activate.bat
-```
-
-## Upgrade pip (all OS)
 ```commandline
-python -m pip install --upgrade pip
+venv\Scripts\activate
 ```
 
 ## Dependencies
@@ -64,90 +47,68 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## Clone the Repo
-
-```commandline
-git clone https://github.com/Annette3125/web-scraper-demo.git
-cd web-scraper-demo
-```
-
 ## Development
  - I use **Black** and **Isort** for code styling and formatting.
 
 ```commandline
 pip install black isort
-black scrape.py
-isort scrape.py
+isort .
+black .
 ```
 
-## Usage and Running
+### Run
 
-#### How to run script:
-Run the scrape.py
 ```commandline
 python scrape.py
-
 ```
-##### CSV output
 
-Saves web_scraper_demo/data/headlines1.scv with columns: Source,url,Heading,author,date.
-CSV file will be generated in directory data/headlines1/.
+### Output files
+The script generates:
+- `data/headlines.csv`
+- `data/headlines.json`
 
+### CSV format
+Columns: `source,url,heading,author,date`
 Example of csv output:
 
 ```
-Source,url,Heading,author,date
-edition.cnn.com,https://edition.cnn.com/2025/07/25/investing/us-stock-market,Sweet spot for tariffs,John Towfighi,
-edition.cnn.com,https://edition.cnn.com/2025/07/25/india/india-bjp-english-language-tensions-intl-hnk-dst,The language dilemma,,"PUBLISHED Jul 25, 2025, 8:30 PM ET"
-edition.cnn.com,https://edition.cnn.com/science/hawaii-mosquitoes-rare-birds-drones-c2e-spc,Drones drop mosquitoes,Nell Lewis,
-edition.cnn.com,https://edition.cnn.com/2025/07/25/climate/heat-speed-up-biological-aging,Extreme heat and aging,Laura Paddison,"PUBLISHED Jul 25, 2025, 8:12 AM ET"
-edition.cnn.com,https://edition.cnn.com/2025/07/25/travel/european-versus-us-ice-water-debate,Ice-obsessed Americans,Francesca Street,"PUBLISHED Jul 25, 2025, 9:40 AM ET"
-edition.cnn.com,https://edition.cnn.com/2025/07/25/science/neanderthal-diet-maggots-rotten-meat,The real Paleo diet,Katie Hunt,"PUBLISHED Jul 25, 2025, 2:00 PM ET"
-edition.cnn.com,https://edition.cnn.com/2025/07/25/entertainment/kelly-osbourne-ozzy-death-intl-scli,Kelly Osbourne,Issy Ronald,"PUBLISHED Jul 25, 2025, 5:24 AM ET"
-edition.cnn.com,https://edition.cnn.com/2025/07/25/politics/donald-trump-israel-hamas-war,Trump tells Israel to ‘finish the job’ against Hamas,Kevin Liptak,"PUBLISHED Jul 25, 2025, 3:43 PM ET"
-edition.cnn.com,https://edition.cnn.com/world/live-news/israel-hamas-gaza-news-07-26-25,Six-month-old baby dies in Gaza amid starvation crisis,Laura Sharman,
+source,url,heading,author,date
+edition.cnn.com,https://edition.cnn.com/2026/03/04/politics/us-troop-deaths-iran-trump-hegseth,Trump’s and Hegseth’s awkward comments about US troop deaths in Iran war,Aaron Blake,"PUBLISHED Mar 4, 2026, 4:45 PM ET"
+edition.cnn.com,https://edition.cnn.com/travel/social-bathhouses-north-america,The new going-out spot isn’t a bar. It’s so much hotter than that,,"PUBLISHED Mar 4, 2026, 8:24 AM ET"
+
 ```
 
-
 ###### JSON output
-Saves web_scraper_demo/data/headlines1.json with columns: Source,url,Heading,author,date.
-CSV file will be generated in directory data/headlines1/.
+A list of objects with keys: `source,url,heading,author,date`
 
 Example of json output:
 
 ```
+
 [
     {
         "source": "edition.cnn.com",
-        "url": "https://edition.cnn.com/2025/07/25/investing/us-stock-market",
-        "heading": "Sweet spot for tariffs",
-        "date": null,
-        "author": "John Towfighi"
+        "url": "https://edition.cnn.com/2026/03/12/economy/costs-iran-war-price-groceries",
+        "heading": "What Iran war could soon cost you",
+        "date": "PUBLISHED Mar 12, 2026, 7:00 AM ET",
+        "author": "Elisabeth Buchwald"
     },
-    {
-        "source": "edition.cnn.com",
-        "url": "https://edition.cnn.com/2025/07/25/india/india-bjp-english-language-tensions-intl-hnk-dst",
-        "heading": "The language dilemma",
-        "date": "PUBLISHED Jul 25, 2025, 8:30 PM ET",
-        "author": null
-    },
-    ]
+   ]
 
 ```
+
+## Notes
+- The scraper respects `robots.txt` and uses small delays to avoid overloading the website.
+- Output files are generated in the `data/` directory.
+
 
 ## License
 
 This project is MIT-licensed. See LICENSE.
 
-
-
-
 ###### Future Improvements
 
- - - Add SQLite integration for persistent storage.
+ - Add SQLite integration for persistent storage.
 
+A complete Python web scraping pipeline (requests → BeautifulSoup → JSON/CSV).
 
-- Feel free to adjust any URLs or paths to match your actual repo structure. This layout keeps things concise, clear and cross-platform.
-::contentReference[oaicite:0]{index=0}
-
-Created by Annette demonstrating a complete Python web-scrapping-demo pipelines (requests → BeautifulSoup → JSON/CSV).
