@@ -1,15 +1,13 @@
 import csv
 import json
-import certifi
 import time
+from pathlib import Path
 from urllib.parse import urljoin, urlparse
-import requests
-from bs4 import BeautifulSoup
 from urllib.robotparser import RobotFileParser
 
-from pathlib import Path
-
-
+import certifi
+import requests
+from bs4 import BeautifulSoup
 
 DATA_DIR = Path("data")
 DATA_DIR.mkdir(exist_ok=True)
@@ -18,7 +16,6 @@ DEBUG = False
 
 json_path = DATA_DIR / "headlines.json"
 csv_path = DATA_DIR / "headlines.csv"
-
 
 
 robots_parser = RobotFileParser()
@@ -64,7 +61,6 @@ while True:
         if not text or not href:
             continue
 
-
         article_url = urljoin(base_url, href)
 
         if article_url in seen_urls:
@@ -87,9 +83,6 @@ while True:
 
         date_tag = article_soup.select_one("div.timestamp__published")
         date_date = date_tag.text.strip() if date_tag else None
-
-
-
 
         headlines.append(
             {
@@ -116,7 +109,6 @@ while True:
         break
 
 
-
 with open(json_path, "w", encoding="utf-8") as f:
     json.dump(headlines, f, ensure_ascii=False, indent=4)
 print(f"Saved {len(headlines)} headlines to {json_path}")
@@ -126,11 +118,13 @@ with open(csv_path, "w", encoding="utf-8", newline="") as file:
     csv_writer.writerow(["source", "url", "heading", "author", "date"])
 
     for item in headlines:
-        csv_writer.writerow([
-            item["source"],
-            item["url"],
-            item["heading"],
-            item["author"] or "",
-            item["date"] or "",
-        ])
+        csv_writer.writerow(
+            [
+                item["source"],
+                item["url"],
+                item["heading"],
+                item["author"] or "",
+                item["date"] or "",
+            ]
+        )
 print(f"Saved {len(headlines)} headlines to {csv_path}")
