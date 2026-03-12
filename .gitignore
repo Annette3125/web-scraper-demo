@@ -212,3 +212,7 @@ __marimo__/
 
 # XML files
 *.xml
+
+
+data/*.csv
+data/*.json
