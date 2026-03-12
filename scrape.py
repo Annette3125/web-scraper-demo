@@ -64,10 +64,6 @@ while True:
         if not text or not href:
             continue
 
-        if DEBUG:
-            print(f"Scraped: {text} — by {author} on {date_date}")
-        elif len(headlines) % 10 == 0:
-            print(f"Scraped {len(headlines)} articles so far...")
 
         article_url = urljoin(base_url, href)
 
@@ -105,7 +101,11 @@ while True:
             }
         )
 
-        print(f"Scraped: {text} — by {author} on {date_date}")
+        if DEBUG:
+            print(f"Scraped: {text} — by {author} on {date_date}")
+        elif len(headlines) % 10 == 0:
+            print(f"Scraped {len(headlines)} articles so far...")
+
         time.sleep(0.5)
 
     next_page = soup.find("a", {"aria-label": "Next"})
